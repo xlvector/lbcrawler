@@ -82,6 +82,7 @@ func (p *ServiceHandler) createDownstream(req *http.Request) *DownStream {
 				p.closeDownstream(down)
 				return nil
 			}
+			down.startTime = time.Now()
 			return down
 		}
 		dlog.Println("fail to find sid: ", sid.Value, p.cache)
