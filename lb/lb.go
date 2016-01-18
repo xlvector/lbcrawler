@@ -1,6 +1,7 @@
 package lb
 
 import (
+	"bytes"
 	"encoding/json"
 	"github.com/xlvector/dlog"
 	"io/ioutil"
@@ -150,7 +151,12 @@ func (p *LoadBalancer) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	}
 	down.used = true
 
-	req2, err := http.NewRequest(req.Method, "http://"+down.up.Addr+req.RequestURI, req.Body)
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		p.printError(rw, down, "fail to read body: "+err.Error())
+		return
+	}
+	req2, err := http.NewRequest(req.Method, "http://"+down.up.Addr+req.RequestURI, bytes.NewReader(body))
 	dlog.Println(req2.Method, " ", req2.URL.String())
 	if err != nil {
 		p.printError(rw, down, "new req2 fail: "+err.Error())
