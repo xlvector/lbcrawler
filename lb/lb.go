@@ -46,7 +46,7 @@ func NewServiceHandler(srv *ServiceConfig) *ServiceHandler {
 					del = append(del, d)
 					continue
 				}
-				if !d.used && time.Now().Sub(d.startTime).Seconds() > 10 {
+				if !d.used && time.Now().Sub(d.startTime).Seconds() > 120 {
 					del = append(del, d)
 					continue
 				}
